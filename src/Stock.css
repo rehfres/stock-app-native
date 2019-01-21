@@ -1,0 +1,38 @@
+.chart {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 55px;
+  width: 190px;
+  /* border: 1px solid gray; */
+}
+.text {
+  color: black;
+  font-size: 13px;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+}
+.text > p {
+  margin: 0;
+}
+.symbol {
+  color: #0081f2;
+  font-weight: 700;
+}
+.price {
+  font-weight: 700;
+}
+.change {
+  font-size: 11px;
+}
+.positive {
+  color: #093;
+}
+.negative {
+  color: #ff333a;
+}
+canvas {
+  width: 100px;
+  height: 35px;
+}
