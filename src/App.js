@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, FlatList, View } from 'react-native';
-// import Stock from './Stock';
+import Stock from './Stock';
 // import { tryToGetUserId, signIn, signOut, getSymbolsFromDb, addSymbolToDb, deleteSymbolFromDb, reorderSymbolsInDb } from './firebase';
 // // import { Container, Draggable } from 'react-smooth-dnd';
-// import { initCanvasSize } from './draw'
+import { initCanvasSize } from './draw'
 // import SignInOut from './SignInOut'
 
 export default class App extends React.Component {
@@ -11,9 +11,9 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       search: '123',
-      symbolsListActive: [],
+      symbolsListActive: ['TSTT'],
       symbolsList: [],
-      searchList: [],
+      searchList: ['TST', 'QEG', 'BWBWE'],
       canvasSize: {
         height: 35,
         width: 100
@@ -23,7 +23,7 @@ export default class App extends React.Component {
     };
     // this.search = this.search.bind(this);
     // this.reorderCharts = this.reorderCharts.bind(this);
-    // this.initCanvasSizes = this.initCanvasSizes.bind(this);
+    this.initCanvasSizes = this.initCanvasSizes.bind(this);
     // this.signInOut = this.signInOut.bind(this);
   }
   getSymbolsList() {
@@ -52,9 +52,10 @@ export default class App extends React.Component {
     }
   }
   initCanvasSizes() {
+    console.log('%c⧭', 'color: #16c72e', window.devicePixelRatio);
     this.setState(state => ({...state, canvasSize: {
-      height: 35 * window.devicePixelRatio,
-      width: 100 * window.devicePixelRatio
+      height: 35,
+      width: 100
     }}), () => initCanvasSize(this.state.canvasSize));
   }
   signInOut() {
@@ -70,7 +71,7 @@ export default class App extends React.Component {
     }
   }
   componentDidMount() {
-    // this.initCanvasSizes();
+    this.initCanvasSizes();
     // tryToGetUserId().then(signedIn => {
     //   console.log('%c⧭s', 'color: #16c7a1', signedIn);
     //   this.setState(state => ({...state, signedIn}));
@@ -81,21 +82,23 @@ export default class App extends React.Component {
     // this.getSymbolsList().then(() => this.search(this.state.search));
   }
   render() {
+    console.log('%c⧭', 'color: #c7166f', this.state.searchList);
     return (
       <View style={styles.App}>
       {/* <Text>Open up App.js to start woOOrking on your app!</Text> */}
         {/* <p>{window.devicePixelRatio}</p> */}
         <TextInput style={styles.searchBar} placeholder="Search" value={this.state.search} onChangeText={(text) => this.search(text)}/>
-        {/* <FlatList
+        <FlatList
           data={this.state.searchList.slice(0, 28)}
-          renderItem={(item) => <Text onPress={() => this.tryToAddSymbolChart(symbol)}>{item}</Text>}
+          renderItem={({item}) => <Text onPress={() => this.tryToAddSymbolChart(item)}>{item}</Text>}
         />
         <View style={styles.chartsContainer}>
           {this.state.symbolsListActive.map(symbol => (
-            <Stock symbol={symbol} canvasSize={this.state.canvasSize}/>
+            // <Text>{symbol}</Text>
+            <Stock symbol={'symbol'} canvasSize={this.state.canvasSize}/>
           ))}
         </View>
-        {this.state.signedIn !== null && <SignInOut atClick={this.signInOut} signedIn={this.state.signedIn}/>} */}
+        {/* {this.state.signedIn !== null && <SignInOut atClick={this.signInOut} signedIn={this.state.signedIn}/>} */}
       </View>
     );
   }

@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-// import logo from './logo.svg';
-import './Stock.css';
-import { drawChart } from './draw.js';
-import timeToSeconds from './timeToSeconds.js';
-import Big from 'big.js';
-import { socket, subscribeToWS, unsubscribeFromWS } from './Socket';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+// import React, { Component } from 'react';
+// import { drawChart } from './draw.js';
+// import timeToSeconds from './timeToSeconds.js';
+// import Big from 'big.js';
+// import { socket, subscribeToWS, unsubscribeFromWS } from './Socket';
+import Canvas from 'react-native-canvas';
 
-class Stock extends Component {
+class Stock extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,14 +22,14 @@ class Stock extends Component {
       coefPricesToCanvas: null,
       webSocketsMessagesCounter: 0
     };
-    this._isMounted = false
+    // this._isMounted = false
     this.canvas = React.createRef();
-    this.getDataAndMakeChart = this.getDataAndMakeChart.bind(this);
-    this.makeChart = this.makeChart.bind(this);
-    this.draw = this.draw.bind(this);
-    this.setPreviousClose = this.setPreviousClose.bind(this);
-    this.modifyEverythingForCanvas = this.modifyEverythingForCanvas.bind(this);
-    this.getPricesMaxMinAndCanvasCoef = this.getPricesMaxMinAndCanvasCoef.bind(this);
+    // this.getDataAndMakeChart = this.getDataAndMakeChart.bind(this);
+    // this.makeChart = this.makeChart.bind(this);
+    // this.draw = this.draw.bind(this);
+    // this.setPreviousClose = this.setPreviousClose.bind(this);
+    // this.modifyEverythingForCanvas = this.modifyEverythingForCanvas.bind(this);
+    // this.getPricesMaxMinAndCanvasCoef = this.getPricesMaxMinAndCanvasCoef.bind(this);
   }
   async getDataAndMakeChart() {
     const chartData = await fetch('https://api.iextrading.com/1.0/stock/' + this.props.symbol + '/chart/1d')
@@ -203,32 +204,43 @@ class Stock extends Component {
     return timeInSeconds - (9 * 60 * 60 + 30 * 60);
   }
   componentDidMount() {
-    this._isMounted = true;
-    Big.DP = 2;
-    this.getDataAndMakeChart().then(() => {
-      subscribeToWS(this.props.symbol);
-      this.onSocketMessage();
-    })
+    console.log('%c⧭', 'color: #16a9c7', this.props.canvasSize.width, this.props.canvasSize.height);
+    const canvas = this.canvas.current;
+    const ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.moveTo(50, 50);
+    ctx.lineTo(250, 150);
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    // ctx.fillStyle = 'purple';
+    // ctx.fillRect(0, 0, 100, 100);
+    // this._isMounted = true;
+    // Big.DP = 2;
+    // this.getDataAndMakeChart().then(() => {
+    //   subscribeToWS(this.props.symbol);
+    //   this.onSocketMessage();
+    // })
   }
   componentWillUnmount() {
-    unsubscribeFromWS(this.props.symbol);
-    this._isMounted = false;
+    // unsubscribeFromWS(this.props.symbol);
+    // this._isMounted = false;
   }
   render() {
-    if (!this.state.prices.length) return null;
-    const lastPrice = this.state.prices[this.state.prices.length - 1].price;
-    const absoluteChange = Big(lastPrice).minus(this.state.previousClose).toString();
-    const percentageChange = Big(lastPrice).times(100).div(this.state.previousClose).minus(100).toString();
+    // if (!this.state.prices.length) return null;
+    // const lastPrice = this.state.prices[this.state.prices.length - 1].price;
+    // const absoluteChange = Big(lastPrice).minus(this.state.previousClose).toString();
+    // const percentageChange = Big(lastPrice).times(100).div(this.state.previousClose).minus(100).toString();
     // console.log('%c⧭', 'color: #c71f16', lastPrice.toString(), this.state.previousClose);
     return (
-      <div className="chart">
-        <div className="text">
-          <p className="symbol non-draggable">{this.props.symbol}</p>
-          <p className="price non-draggable">{lastPrice}</p>
-          <p className={'change non-draggable ' + (absoluteChange >= 0 ? 'positive' : 'negative')}>{absoluteChange} ({percentageChange}%)</p>
-        </div>
-        <canvas ref={this.canvas} width={this.props.canvasSize.width} height={this.props.canvasSize.height}></canvas>
-      </div>
+      <View>
+        {/* <Text>Open up App.js to start woOsssOrking on your app!</Text> */}
+        {/* <View>
+          <Text>{this.props.symbol}</Text>
+          <Text>{lastPrice}</Text>
+          <Text>{absoluteChange} ({percentageChange}%)</Text>
+        </View> */}
+        <Canvas ref={this.canvas}/>
+      </View>
     );
   }
 }
